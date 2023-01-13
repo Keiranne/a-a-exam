@@ -14,3 +14,6 @@ Binomial
 gener_gray
 gener_squashed
 JohnsonTrotter
+
+graph module:
+dfs + bfs + graph (matrix)
