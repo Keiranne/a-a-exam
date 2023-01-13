@@ -18,8 +18,8 @@ int partition(Tinfo* arr, int l, int r, Tinfo p);
 int partition(Tinfo* A, int l, int r);
 void QuickSort(Tinfo *A, int l, int r);
 
-int BinarySearch(const Tinfo*A, int n, Tinfo key); // итеративная версия
-int BinarySearch(const Tinfo*A, int l, int r, Tinfo key); // рекурсия
+int BinarySearch(const Tinfo*A, int n, Tinfo key); // iterative
+int BinarySearch(const Tinfo*A, int l, int r, Tinfo key); // r
 
 int selection_problem(Tinfo * arr, int n, int k);
 
