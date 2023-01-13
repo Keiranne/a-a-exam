@@ -101,13 +101,12 @@ int main() {
 	{
 		Graph gr; 
 		in >> gr;
-		std::cout << gr;
+		//std::cout << gr;
 		std::cout << "\n-----------------------\n";
-		std::cout << "\nDFS:\n";	DFS(gr);
+		//std::cout << "\nDFS:\n";	DFS(gr);
 		std::cout << "\nDFSST:\n";	DFSST(gr);
 		std::cout << "\nBFS:\n";	BFS(gr);
 	}
-
 	std::cin.get();
 	in.close();
 }
