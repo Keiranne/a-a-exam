@@ -10,6 +10,9 @@ BinarySearch
 selection_problem
 
 Combinatorics:
+p(n) 
+c(k, n)
+Travelling Salesman Problem - Exhaustive Search
 Binomial
 gener_gray
 gener_squashed
