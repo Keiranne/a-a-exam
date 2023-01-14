@@ -11,8 +11,40 @@ void print(T* arr, int n, std::ostream & out = std::cout) {
 	for (int i = 0; i < n; ++i)
 		out << arr[i] << ' ';
 }
-
+template <class T>
+void swp(T &a, T &b)
+{
+	T tmp = b;
+	b = a;
+	a = tmp;
+}
 void copy(Tinfo * beg, Tinfo * end, Tinfo * dest);
+
+int* get_next_p(int* arr, int size);
+int* get_next_c(int* arr, int n, int k);
+
+int TSP(int** adj_matrix, int n) {
+	int *hmt_path = new int[n];
+
+	auto get_pweight = [adj_matrix, &hmt_path, n]() {
+		int w = adj_matrix[hmt_path[0]][hmt_path[n - 1]];
+		for(int i = 0; i < n-1;++i)
+			w += adj_matrix[hmt_path[i]][hmt_path[i+1]];
+		return w;
+	};
+
+	for (int i = 0; i < n; ++i)
+		hmt_path[i] = i;
+	int min_w = get_pweight(), curr_w = 0;
+
+	while (get_next_p(hmt_path, n))
+	{
+		curr_w = get_pweight();
+		if (curr_w < min_w)
+			min_w = curr_w;
+	}
+	return min_w;
+}
 
 void to_subset(Tinfo* arr, int n, bool*B);
 
@@ -21,25 +53,39 @@ void gener_squashed(Tinfo* arr, int n);
 void JohnsonTrotter(int n, std::ostream& out = std::cout);
 
 
+
 int main(){
 	//int n, k;
 	//std::cin  >> k >> n;
 	//std::cout << "\nC = " << Binomial(n, k);
 
-	//JohnsonTrotter(4);
-	//std::cout << '\n' << clock() << " ms";
+	//int n;
+	//std::cin >> n;
+	//JohnsonTrotter(n);
 
-	int n;
-	std::cin >> n;
-	Tinfo * arr = new Tinfo[n];
+	//int n;
+	//std::cin >> n;
+	//Tinfo * arr = new Tinfo[n];
+	//for (int i = 0; i < n; ++i)
+	//	std::cin >> arr[i];
+	//gener_gray(arr, n);
+	//std::cout << '\n';
+	//gener_squashed(arr, n);
+	//delete[] arr;
+
+	int n = 4;
+	int **arr = new int*[n];
 	for (int i = 0; i < n; ++i)
-		std::cin >> arr[i];
-
-	gener_gray(arr, n);
-	std::cout << '\n';
-	gener_squashed(arr, n);
-
+		arr[i] = new int[n];
+	for (int i = 0; i < n; ++i)
+		for (int j = 0; j < n; ++j)
+			std::cin >> arr[i][j];
+	std::cout << TSP(arr, n);
+	for (int i = 0; i < n; ++i)
+		delete[] arr[i];
 	delete[] arr;
+
+
 	std::cin.get();
 	std::cin.get();
 }
@@ -71,6 +117,50 @@ int power_set(int n) {
 void copy(Tinfo * beg, Tinfo * end, Tinfo * dest) {
 	while (beg != end)
 		*dest++ = *beg++;
+}
+
+int * get_next_p(int * arr, int size) {//_no_rep in lexicographical order
+	int i = size - 1;
+	while (i && arr[i] < arr[i - 1])
+		--i;
+	--i;
+	if (i >= 0) {// i == -1 -> no more permutations, arr sorted in descending order 
+		int j = size - 1;
+		while (j && arr[j] < arr[i])
+			--j;
+		swp(arr[i], arr[j]);
+		++i;
+		j = size - 1;
+		while (i < j)
+		{
+			swp(arr[i], arr[j]);
+			++i; --j;
+		}
+	}
+	else
+	{
+		delete[] arr;
+		arr = nullptr;
+	}
+	return arr;
+}
+
+
+int * get_next_c(int * arr, int n, int k) {//_no_rep in lexicographical order
+	int i = k - 1;
+	while (arr[i] == n - k + 1 + i)
+		--i;
+	if (i < 0)
+	{
+		delete[] arr;
+		arr = nullptr;
+	}
+	else {
+		++arr[i];
+		for (int j = i + 1; j < k; ++j)
+			arr[j] = 1 + arr[j - 1];
+	}
+	return arr;
 }
 
 void to_subset(Tinfo * arr, int n, bool * B) {
@@ -142,3 +232,39 @@ void JohnsonTrotter(int n, std::ostream & out) {
 	out << P.to_str() << " -> " << i + 1 << '\n';
 }
 
+
+
+/*
+// generate & print all c(k,n) in main:
+std::cout << "\n n = ";
+int n; std::cin >> n;
+std::cout << "\n k = ";
+int k; std::cin >> k;
+int* arr = new int[n];
+std::cout << "\n Array:\n";
+for (int i = 0; i < n; ++i)
+	std::cin >> arr[i];
+int i = 0;
+do
+{
+	std::cout << '\n' << ++i << ": ";
+	print(arr, k);
+} while (get_next_c(arr, n, k));
+*/
+
+/*
+// generate & print all p(n) in main:
+std::cout << "\n n = ";
+int n; std::cin >> n;
+int* arr = new int[n];
+std::cout << "\n Array:\n";
+for (int i = 0; i < n; ++i)
+	std::cin >> arr[i];
+int i = 0;
+do
+{
+	std::cout << '\n' << ++i << ": ";
+	print(arr, n);
+}
+while (get_next_p(arr, n));
+*/
